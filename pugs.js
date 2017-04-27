@@ -1,7 +1,9 @@
 function createPugString(word) {
-  if (word.length > 7) { return 'please try a shorter word' }
+  if (word.length > 7) { return 'please try a shorter word' };
 
-  var letters = {
+  const pugmoji = ':spinning-pug:'
+      , spaces  = '      '
+      , letters = {
     a: '01101001111110011001',
     b: '11101001111110011110',
     c: '01101001100010010110',
@@ -30,30 +32,24 @@ function createPugString(word) {
     z: '11110001011010001111'
   };
 
-  var pugEmoji    = ':spinning-pug:'
-    , spaces = '      ';
+  let lines     = ['', '', '', '', '']
+    , pugString = '';
 
-  var lines = ['', '', '', '', '']
+  for (let i of word) {
+    const letterCode = letters[i.toLowerCase()]
+        , regexTest  = new RegExp(`.{1,${letterCode.length/5}}`, 'g')
+        , codeArray  = letterCode.match(regexTest);
 
-  for (var i = 0; i < word.length; i++) {
-    var letterCode = letters[word[i].toLowerCase()]
-      , regexTest  = new RegExp('.{1,' + letters[word[i].toLowerCase()].length/5 + '}', 'g')
-      , codeArray  = letterCode.match(regexTest);
-
-    var j = 0;
-    while (j < 5) {
-      lines[j] += codeArray[j] + '0'
-      j++
-    }
+    codeArray.forEach((c, i) => {
+      lines[i] += `${c}0`
+    });
   }
-    
-  var pugString = ''
   
-  for (var k = 0; k < lines.length; k++) {
-    for (var l = 0; l < lines[k].length; l++) {
-      pugString += lines[k][l] === '1' ? pugEmoji : spaces
+  for (let j of lines) {
+    for (let k of j) {
+      pugString += k === '1' ? pugmoji : spaces;
     }
-    pugString += '\n'
+    pugString += '\n';
   }
-  return pugString
+  return pugString;
 }
